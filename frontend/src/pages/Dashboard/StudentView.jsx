@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE_URL } from '../../api/config';
 import { 
     Radar, 
     Bar, 
@@ -63,9 +63,9 @@ const StudentView = () => {
         const fetchData = async () => {
             try {
                 const [studentRes, analysisRes, companiesRes] = await Promise.all([
-                    axios.get(`/api/data/student/${user.username}`),
-                    axios.get(`/api/data/student-analysis/${user.username}`),
-                    axios.get('/api/data/companies')
+                    axios.get(`${API_BASE_URL}/data/student/${user.username}`),
+                    axios.get(`${API_BASE_URL}/data/student-analysis/${user.username}`),
+                    axios.get(`${API_BASE_URL}/data/companies`)
                 ]);
                 
                 setStudent(studentRes.data);
@@ -101,14 +101,14 @@ const StudentView = () => {
                 cgpa: parseFloat(formData.cgpa),
                 skills: formData.skills.split(',').map(s => s.trim()).filter(s => s !== '')
             };
-            const res = await axios.post('/api/data/register-placement', dataToSave);
+            const res = await axios.post(`${API_BASE_URL}/data/register-placement`, dataToSave);
             if (res.data.success) {
                 alert('Profile updated successfully!');
                 
                 // Immediately refresh student and analysis data to reflect changes in UI cards
                 const [studentRes, analysisRes] = await Promise.all([
-                    axios.get(`/api/data/student/${user.username}`),
-                    axios.get(`/api/data/student-analysis/${user.username}`)
+                    axios.get(`${API_BASE_URL}/data/student/${user.username}`),
+                    axios.get(`${API_BASE_URL}/data/student-analysis/${user.username}`)
                 ]);
                 
                 setStudent(studentRes.data);

@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { ShieldCheck, Server, LogIn } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '../api/config';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -16,7 +17,9 @@ const Login = () => {
     useEffect(() => {
         const checkHealth = async () => {
             try {
-                const res = await axios.get('/api/health');
+                // Health check uses the same base URL prefix 
+                // but refers to the root health endpoint in the backend
+                const res = await axios.get(`${API_BASE_URL.replace('/api', '')}/health`);
                 if (res.data.status === 'ok') setServerStatus('online');
                 else setServerStatus('offline');
             } catch (err) {

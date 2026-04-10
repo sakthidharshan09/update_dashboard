@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../api/config';
 import { 
     Activity, 
     TrendingUp, 
@@ -36,9 +36,9 @@ const AdminView = () => {
         setLoading(true);
         try {
             const [statsRes, activityRes, trendRes] = await Promise.all([
-                axios.get('/api/data/dashboard-stats'),
-                axios.get('/api/data/activities'),
-                axios.get('/api/data/industry-trends')
+                axios.get(`${API_BASE_URL}/data/dashboard-stats`),
+                axios.get(`${API_BASE_URL}/data/activities`),
+                axios.get(`${API_BASE_URL}/data/industry-trends`)
             ]);
             setStats(statsRes.data);
             setActivities(activityRes.data);
@@ -57,7 +57,7 @@ const AdminView = () => {
                 ...trendForm,
                 requiredSkills: trendForm.requiredSkills.split(',').map(s => s.trim()).filter(s => s !== '')
             };
-            await axios.post('/api/data/industry-trends', data);
+            await axios.post(`${API_BASE_URL}/data/industry-trends`, data);
             alert(trendForm._id ? 'Trend updated' : 'Trend added');
             setTrendForm({ jobRole: '', requiredSkills: '', averagePackage: '', demandLevel: 'High', _id: null });
             fetchAdminData();
@@ -69,7 +69,7 @@ const AdminView = () => {
     const deleteTrend = async (id) => {
         if (!window.confirm('Delete this industry trend?')) return;
         try {
-            await axios.delete(`/api/data/industry-trends/${id}`);
+            await axios.delete(`${API_BASE_URL}/data/industry-trends/${id}`);
             fetchAdminData();
         } catch (err) {
             alert('Delete failed.');

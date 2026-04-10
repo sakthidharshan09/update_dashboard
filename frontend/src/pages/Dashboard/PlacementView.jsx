@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../api/config';
 import { 
     Users, 
     Building2, 
@@ -35,9 +35,9 @@ const PlacementView = () => {
         setLoading(true);
         try {
             const [studentsRes, companiesRes, statsRes] = await Promise.all([
-                axios.get('/api/data/all-students'),
-                axios.get('/api/data/companies'),
-                axios.get('/api/data/dashboard-stats')
+                axios.get(`${API_BASE_URL}/data/all-students`),
+                axios.get(`${API_BASE_URL}/data/companies`),
+                axios.get(`${API_BASE_URL}/data/dashboard-stats`)
             ]);
             setStudents(studentsRes.data);
             setCompanies(companiesRes.data);
@@ -52,7 +52,7 @@ const PlacementView = () => {
     const handleCompanySubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/api/data/companies', companyForm);
+            await axios.post(`${API_BASE_URL}/data/companies`, companyForm);
             alert('Company updated!');
             setCompanyForm({ name: '', role: '', package: '', driveDate: '', status: 'Upcoming' });
             fetchData();
@@ -64,7 +64,7 @@ const PlacementView = () => {
     const deleteStudent = async (id, name) => {
         if (!window.confirm(`Delete student record for ${name}?`)) return;
         try {
-            await axios.delete(`/api/data/student/${id}`);
+            await axios.delete(`${API_BASE_URL}/data/student/${id}`);
             fetchData();
         } catch (err) {
             alert('Delete failed.');
@@ -78,7 +78,7 @@ const PlacementView = () => {
         if (!pkg) return;
 
         try {
-            await axios.post('/api/data/update-placement-status', {
+            await axios.post(`${API_BASE_URL}/data/update-placement-status`, {
                 studentId: id,
                 isPlaced: true,
                 company,
