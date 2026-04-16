@@ -31,7 +31,20 @@ mongoose.connect(MONGODB_URI)
         console.log('💡 Tip: Ensure MongoDB is running locally or check your MONGODB_URI in .env');
     });
 
-// ================= API ROUTES =================
+// ================= DEFAULT & API ROUTES =================
+
+// Root endpoint welcome message
+app.get('/', (req, res) => {
+    res.json({
+        message: "Welcome to the Academic Industry Analytics Dashboard API!",
+        status: "Backend is running smoothly.",
+        health_check: "/api/health"
+    });
+});
+
+app.get('/api', (req, res) => {
+    res.json({ message: "AIAD API Base Endpoint" });
+});
 
 // Health check API
 app.get('/api/health', (req, res) => {
